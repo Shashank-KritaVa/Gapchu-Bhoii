@@ -45,7 +45,7 @@
             background-color: #03000a;
             color: #f3f4f6;
             overflow-x: hidden;
-            cursor: none; /* Custom premium cursor */
+            /* Standard fallback cursor before JavaScript interaction initializes */
         }
         
         /* Custom scrollbar */
@@ -89,27 +89,44 @@
             position: fixed;
             transform: translate(-50%, -50%);
             pointer-events: none;
-            z-index: 9999;
-            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
-            mix-blend-mode: difference;
+            z-index: 99999;
+            opacity: 0; /* Starts invisible until movement occurs */
+            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s, opacity 0.2s;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
         }
         #custom-cursor-dot {
-            width: 4px;
-            height: 4px;
+            width: 6px;
+            height: 6px;
             background-color: #ec4899;
             border-radius: 50%;
             position: fixed;
             transform: translate(-50%, -50%);
             pointer-events: none;
-            z-index: 9999;
+            z-index: 99999;
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 0 8px #ec4899;
         }
 
-        /* Hover states for interactive cursor */
-        .hover-target:hover ~ #custom-cursor {
+        /* Hover states for interactive elements */
+        #custom-cursor.cursor-hover {
             width: 50px;
             height: 50px;
-            background-color: rgba(168, 85, 247, 0.2);
-            border-color: #a855f7;
+            background-color: rgba(168, 85, 247, 0.25);
+            border-color: #ec4899;
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.6);
+        }
+        #custom-cursor-dot.cursor-hover {
+            transform: translate(-50%, -50%) scale(2);
+            background-color: #a855f7;
+        }
+
+        /* Enforce complete cursor hiding on desktop devices across all sub-elements */
+        @media (hover: hover) and (pointer: fine) {
+            body.custom-cursor-enabled,
+            body.custom-cursor-enabled * {
+                cursor: none !important;
+            }
         }
 
         /* Glitch text effect */
@@ -300,7 +317,7 @@
             <!-- Dynamic Cinematic Visual Storytelling Column -->
             <div class="flex flex-col justify-center">
                 <div class="inline-flex items-center gap-2 font-mono text-sm text-blue-400 mb-4 tracking-wider">
-                    <span>EPOCH I: YEAR 2019</span>
+                    <span>EPOCH I: YEAR 2024</span>
                     <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                     <span>CLASS 9 DECRYPTION</span>
                 </div>
@@ -526,7 +543,7 @@
 
         <div class="max-w-4xl mx-auto w-full relative">
             <div class="text-center mb-16">
-                <span class="font-mono text-xs text-pink-500 tracking-[0.2em] uppercase">EPOCH III: THE TEMPORAL SHIFT</span>
+                <span class="font-mono text-xs text-pink-500 tracking-[0.2em] uppercase">EPOCH III: YEAR 2025 TEMPORAL SHIFT</span>
                 <h2 class="text-4xl md:text-6xl font-display font-black tracking-tight mt-2">
                     CLASS 10 SYNERGY
                 </h2>
@@ -592,17 +609,17 @@
     <!-- SECTION 4 — FIRST OUTSIDE SCHOOL MEET (WALK & SPY DOG) -->
     <section id="section-walk" class="relative min-h-screen flex flex-col justify-center py-24 px-6 z-10 overflow-hidden bg-gradient-to-b from-cyber-bg to-[#0b0416]">
         
-        <!-- Night Walk Sky Grid -->
-        <div class="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-purple-950/20 to-transparent pointer-events-none"></div>
+        <!-- Daytime Walk Sky Grid -->
+        <div class="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-blue-900/10 to-transparent pointer-events-none"></div>
 
         <div class="max-w-6xl mx-auto w-full">
             <div class="text-center mb-12">
                 <span class="font-mono text-xs text-blue-400 tracking-[0.2em] uppercase">EPOCH IV: SUBURBAN RECONNAISSANCE</span>
                 <h2 class="text-4xl md:text-5xl font-display font-black tracking-tight mt-2">
-                    THE NIGHT WALK ARCHIVE
+                    THE DAYTIME WALK ARCHIVE
                 </h2>
                 <p class="text-gray-400 font-mono text-sm max-w-xl mx-auto mt-4">
-                    The casual roam near uncle's sector, talking about future tech, space engines, and a highly suspicious canine field agent following behind.
+                    The casual afternoon walk near uncle's sector, talking about future tech, space engines, and a highly suspicious canine field agent following behind.
                 </p>
             </div>
 
@@ -614,15 +631,15 @@
                     <div class="space-y-4 font-mono text-xs md:text-sm text-gray-300">
                         <div class="flex items-start gap-3">
                             <span class="text-blue-400 font-bold">&gt; LOCATION:</span>
-                            <span>Uncle's neighbourhood sector, night environment.</span>
+                            <span>Uncle's neighbourhood sector, bright daytime environment.</span>
                         </div>
                         <div class="flex items-start gap-3">
                             <span class="text-purple-400 font-bold">&gt; OBJECTIVE:</span>
-                            <span>First proper non-school physical meetup. Roaming streets casually chatting.</span>
+                            <span>First proper non-school physical meetup. Roaming the suburban roads casually chatting under the sun.</span>
                         </div>
                         <div class="flex items-start gap-3">
                             <span class="text-pink-400 font-bold">&gt; INTEL REPORT:</span>
-                            <span class="text-pink-300">A mysterious, highly persistent rogue street dog initiated tailing sequences. Maintained exactly 5 meters tracking distance. Absolute tactical behavior. 😭🐕</span>
+                            <span class="text-pink-300">A mysterious, highly persistent rogue street dog initiated daytime tailing sequences. Maintained exactly 5 meters tracking distance. Absolute tactical behavior. 😭🐕</span>
                         </div>
                     </div>
                 </div>
@@ -633,11 +650,13 @@
                         ANIMATION_LOOP: WALK_RADAR.EXE
                     </div>
 
-                    <!-- Stars Backdrop in Box -->
-                    <div class="absolute inset-0 bg-black/40 -z-10 rounded-2xl">
-                        <!-- Custom star sparks -->
-                        <div class="absolute top-8 left-1/4 w-1 h-1 bg-white rounded-full animate-ping"></div>
-                        <div class="absolute top-16 right-1/3 w-1 h-1 bg-white rounded-full animate-pulse"></div>
+                    <!-- Daytime Sky Backdrop inside Box -->
+                    <div class="absolute inset-0 bg-gradient-to-b from-blue-950/50 via-sky-950/20 to-black/60 -z-10 rounded-2xl">
+                        <!-- Custom glowing digital sun -->
+                        <div class="absolute top-6 right-8 text-3xl animate-pulse">☀️</div>
+                        <!-- Floating digital daytime clouds -->
+                        <div class="absolute top-8 left-10 text-xl opacity-30 animate-pulse duration-[4000ms]">☁️</div>
+                        <div class="absolute top-12 left-1/2 text-lg opacity-25 animate-pulse duration-[6000ms]">☁️</div>
                     </div>
 
                     <!-- Undercover Spy Dog Tracking Arena -->
@@ -720,22 +739,25 @@
                         </button>
                     </div>
 
-                    <!-- Win Screen Overlay -->
-                    <div id="game-win-overlay" class="absolute inset-0 bg-black/95 z-20 flex flex-col justify-center items-center p-8 text-center hidden">
-                        <span class="text-5xl mb-4 animate-bounce">🏆</span>
-                        <h4 class="font-display text-2xl font-black text-green-400 mb-2 uppercase tracking-wide">SYSTEM DECRYPTED SUCCESSFULLY</h4>
+                    <!-- Win Screen Overlay (Highly Responsive with perfect scrollbar fallback layout) -->
+                    <div id="game-win-overlay" class="absolute inset-0 bg-black/98 z-30 flex flex-col justify-center items-center p-4 md:p-6 text-center hidden overflow-y-auto max-h-full">
+                        <span class="text-3xl md:text-4xl mb-1.5 animate-bounce">🏆</span>
+                        <h4 class="font-display text-lg md:text-xl font-black text-green-400 mb-2 uppercase tracking-wide">SYSTEM DECRYPTED SUCCESSFULLY</h4>
                         
                         <!-- The Secret Decrypted Message Box -->
-                        <div class="glass-card-neon p-6 rounded-2xl border-green-500/30 max-w-lg mb-8 text-left relative overflow-hidden">
-                            <div class="absolute -right-12 -bottom-12 text-7xl text-purple-500/10 rotate-12 select-none pointer-events-none font-sans font-black">BROTHER</div>
-                            <h5 class="font-mono text-[10px] text-green-400 mb-2 uppercase tracking-widest border-b border-green-500/20 pb-1">TRANSMISSION LOG: DECRYPTED</h5>
-                            <p class="font-mono text-xs md:text-sm text-gray-200 leading-relaxed font-bold">
+                        <div class="glass-card-neon p-4 md:p-6 rounded-xl border-green-500/40 max-w-md w-full mb-4 text-left relative overflow-hidden shadow-[0_0_25px_rgba(34,197,94,0.15)]">
+                            <div class="absolute -right-6 -bottom-6 text-5xl text-purple-500/10 rotate-12 select-none pointer-events-none font-sans font-black">BROTHER</div>
+                            <h5 class="font-mono text-[9px] text-green-400 mb-1.5 uppercase tracking-widest border-b border-green-500/20 pb-1 flex justify-between items-center">
+                                <span>TRANSMISSION LOG: DECRYPTED</span>
+                                <span class="animate-pulse font-bold text-pink-500">SECURE CONNECT 🟢</span>
+                            </h5>
+                            <p class="font-mono text-xs md:text-sm text-gray-100 leading-relaxed font-bold tracking-wide">
                                 "Ye kabhi upar upar ka friendship nahi tha. Tu actually mera bhai hai. We survived Class 9 benches, Class 10 restructures, coding grids, and outside streets. Thanks for existing, Gapchu. ❤️"
                             </p>
                         </div>
                         
-                        <div class="flex gap-4">
-                            <button onclick="resetGame()" class="hover-target px-6 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl font-mono text-xs uppercase text-white transition-colors">
+                        <div class="flex gap-3">
+                            <button onclick="resetGame()" class="hover-target px-5 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:brightness-110 rounded-lg font-mono text-[11px] uppercase text-white font-bold transition-all duration-300">
                                 PLAY AGAIN
                             </button>
                         </div>
@@ -1036,31 +1058,66 @@
         // CUSTOM PREMIUM CURSOR CONTROLLER
         const cursor = document.getElementById('custom-cursor');
         const cursorDot = document.getElementById('custom-cursor-dot');
-        const hoverTargets = document.querySelectorAll('.hover-target');
 
+        // Track mouse movements to only show custom elements when fine cursor is active
         document.addEventListener('mousemove', (e) => {
+            if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+                document.body.classList.add('custom-cursor-enabled');
+                cursor.style.opacity = '1';
+                cursorDot.style.opacity = '1';
+            }
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
             cursorDot.style.left = e.clientX + 'px';
             cursorDot.style.top = e.clientY + 'px';
         });
 
-        // Scale cursor dynamically on hover of premium interactive zones
-        hoverTargets.forEach(target => {
-            target.addEventListener('mouseenter', () => {
-                cursor.style.width = '55px';
-                cursor.style.height = '55px';
-                cursor.style.backgroundColor = 'rgba(168, 85, 247, 0.2)';
-                cursor.style.borderColor = '#ec4899';
-                cursorDot.style.transform = 'translate(-50%, -50%) scale(2.5)';
-            });
-            target.addEventListener('mouseleave', () => {
-                cursor.style.width = '20px';
-                cursor.style.height = '20px';
-                cursor.style.backgroundColor = 'transparent';
-                cursor.style.borderColor = '#3b82f6';
-                cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
-            });
+        // Toggle state opacity on pointer leave/enter frame
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+            cursorDot.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+            if (document.body.classList.contains('custom-cursor-enabled')) {
+                cursor.style.opacity = '1';
+                cursorDot.style.opacity = '1';
+            }
+        });
+
+        // Global Event Delegation for Dynamic Hover Effects (Buttons, Links, Cards)
+        document.addEventListener('mouseover', (e) => {
+            const target = e.target;
+            if (target && (
+                target.closest('a') || 
+                target.closest('button') || 
+                target.closest('.hover-target') || 
+                target.closest('.tilt-card') ||
+                window.getComputedStyle(target).cursor === 'pointer'
+            )) {
+                cursor.classList.add('cursor-hover');
+                cursorDot.classList.add('cursor-hover');
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            const target = e.target;
+            if (target && (
+                target.closest('a') || 
+                target.closest('button') || 
+                target.closest('.hover-target') || 
+                target.closest('.tilt-card')
+            )) {
+                cursor.classList.remove('cursor-hover');
+                cursorDot.classList.remove('cursor-hover');
+            }
+        });
+
+        // Hybrid / Touchscreen laptop safety: fall back to normal cursor on screen taps
+        window.addEventListener('touchstart', function handleTouch() {
+            document.body.classList.remove('custom-cursor-enabled');
+            cursor.style.display = 'none';
+            cursorDot.style.display = 'none';
+            window.removeEventListener('touchstart', handleTouch);
         });
 
         // Keyboard triggers for audio clicking
