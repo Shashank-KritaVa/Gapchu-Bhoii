@@ -1,585 +1,1544 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drift // Behavioral Operating System</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Gapchu Royal - The Lore</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons for clean minimal typography iconography -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Premium Google Font: Inter -->
+    <!-- Google Fonts: Space Grotesk, Inter, and Share Tech Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        mono: ['Share Tech Mono', 'monospace'],
+                    },
+                    colors: {
+                        cyber: {
+                            bg: '#03000a',
+                            purple: '#a855f7',
+                            blue: '#3b82f6',
+                            neonPink: '#ec4899',
+                            neonGreen: '#22c55e',
+                            red: '#ef4444'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
-            color: #1d1d1f;
+            background-color: #03000a;
+            color: #f3f4f6;
             overflow-x: hidden;
-            width: 100%;
+            cursor: none; /* Custom premium cursor */
         }
-
-        /* Premium clean minimal scrollbar styling */
+        
+        /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #f8f9fa;
+            background: #03000a;
         }
         ::-webkit-scrollbar-thumb {
-            background: #e5e5ea;
-            border-radius: 999px;
+            background: #3b82f6;
+            border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #d1d1d6;
+            background: #a855f7;
         }
 
-        /* Premium Apple/Google Style Minimalist Cards */
-        .premium-card {
-            background: #ffffff;
-            border: 1px solid #e5e5ea;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .premium-card:hover {
-            border-color: #d1d1d6;
-            box-shadow: 0 12px 24px -4px rgba(0, 0, 0, 0.04);
-            transform: translateY(-1px);
+        /* Glassmorphism custom classes */
+        .glass-card {
+            background: rgba(15, 10, 25, 0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        /* Elegant Neutral Range Slider Accent Track Styling */
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            background: transparent;
-            cursor: pointer;
+        .glass-card-neon {
+            background: rgba(15, 10, 25, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.15);
         }
-        input[type="range"]::-webkit-slider-runnable-track {
-            background: #e5e5ea;
-            height: 4px;
-            border-radius: 999px;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            margin-top: -6px;
-            background-color: #0071e3;
-            height: 16px;
-            width: 16px;
+
+        /* Custom Cursor */
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #3b82f6;
             border-radius: 50%;
-            border: 2px solid #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-            transition: transform 0.1s ease;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+            mix-blend-mode: difference;
         }
-        input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.15);
+        #custom-cursor-dot {
+            width: 4px;
+            height: 4px;
+            background-color: #ec4899;
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        /* Checkbox striking styles */
-        .custom-checkbox:checked + span {
-            color: #8e8e93;
-            text-decoration: line-through;
+        /* Hover states for interactive cursor */
+        .hover-target:hover ~ #custom-cursor {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(168, 85, 247, 0.2);
+            border-color: #a855f7;
+        }
+
+        /* Glitch text effect */
+        .glitch-text {
+            position: relative;
+            text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff,
+                         0.025em 0.04em 0 #fffc00;
+            animation: glitch 725ms infinite;
+        }
+        
+        @keyframes glitch {
+            0% {
+                text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff, 0.025em 0.04em 0 #fffc00;
+            }
+            14% {
+                text-shadow: 0.05em 0 0 #00fffc, -0.03em -0.04em 0 #fc00ff, 0.025em 0.04em 0 #fffc00;
+            }
+            15% {
+                text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.025em 0 #fc00ff, -0.05em -0.05em 0 #fffc00;
+            }
+            49% {
+                text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.025em 0 #fc00ff, -0.05em -0.05em 0 #fffc00;
+            }
+            50% {
+                text-shadow: 0.025em 0.05em 0 #00fffc, -0.05em -0.025em 0 #fc00ff, 0.025em -0.05em 0 #fffc00;
+            }
+            99% {
+                text-shadow: 0.025em 0.05em 0 #00fffc, -0.05em -0.025em 0 #fc00ff, 0.025em -0.05em 0 #fffc00;
+            }
+            100% {
+                text-shadow: -0.025em 0 0 #00fffc, -0.025em -0.025em 0 #fc00ff, -0.025em -0.05em 0 #fffc00;
+            }
+        }
+
+        /* Scanline Overlay */
+        .scanlines {
+            position: relative;
+            overflow: hidden;
+        }
+        .scanlines::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Dynamic perspective card container */
+        .perspective-container {
+            perspective: 1000px;
+        }
+        .tilt-card {
+            transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
+
+        /* Hide Scrollbar for special areas */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen relative antialiased">
+<body class="font-sans antialiased bg-cyber-bg text-gray-100 selection:bg-purple-600 selection:text-white">
 
-    <!-- Global Premium Toast Notification Container -->
-    <div id="toast-container" class="fixed top-6 right-6 z-50 flex flex-col gap-3 max-w-sm w-full px-4 sm:px-0 pointer-events-none"></div>
+    <!-- Custom Mouse Follower -->
+    <div id="custom-cursor"></div>
+    <div id="custom-cursor-dot"></div>
 
-    <!-- Main Navigation Header -->
-    <header class="border-b border-[#e5e5ea] bg-white/80 backdrop-blur-md sticky top-0 z-40 w-full">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="h-8 w-8 rounded-lg bg-[#0071e3] flex items-center justify-center shadow-sm">
-                    <i data-lucide="compass" class="w-4 h-4 text-white"></i>
-                </div>
-                <span class="text-lg font-semibold tracking-tight text-[#1d1d1f]">Drift OS</span>
+    <!-- Background Starfield/Particle Canvas -->
+    <canvas id="particle-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-60"></canvas>
+
+    <!-- Floating Cyber Glow Blobs -->
+    <div class="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-blue-900/10 blur-[150px] pointer-events-none z-0 animate-pulse-slow"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-purple-900/10 blur-[180px] pointer-events-none z-0 animate-pulse-slow"></div>
+
+    <!-- Floating Emojis / Meme Element Spawner Container -->
+    <div id="floating-emoji-container" class="fixed inset-0 pointer-events-none z-10 overflow-hidden"></div>
+
+    <!-- UI Overlay Sound Waves & Music Trigger -->
+    <div class="fixed bottom-6 right-6 z-50 flex items-center gap-3">
+        <button id="sound-toggle-btn" class="hover-target glass-card flex items-center justify-center p-4 rounded-full border border-purple-500/30 text-purple-400 hover:text-white hover:border-purple-400 transition-all duration-300 shadow-lg">
+            <span class="mr-2 text-xs font-mono tracking-widest uppercase opacity-70" id="audio-status-label">SOUND: OFF</span>
+            <div class="flex items-end gap-[3px] h-4 w-6">
+                <span class="music-bar w-1 bg-purple-500 transition-all duration-300" style="height: 15%"></span>
+                <span class="music-bar w-1 bg-blue-500 transition-all duration-300" style="height: 40%"></span>
+                <span class="music-bar w-1 bg-pink-500 transition-all duration-300" style="height: 25%"></span>
+                <span class="music-bar w-1 bg-purple-400 transition-all duration-300" style="height: 55%"></span>
+            </div>
+        </button>
+    </div>
+
+    <!-- Keyboard Interaction Notice Bubble -->
+    <div class="fixed top-6 left-6 z-50 hidden md:flex items-center gap-2 glass-card px-4 py-2 rounded-full border border-blue-500/20 text-xs font-mono text-blue-300/80 animate-bounce">
+        <i class="fa-solid fa-keyboard text-sm"></i>
+        <span>Press <strong class="text-pink-400">[G]</strong> for Game | <strong class="text-purple-400">[M]</strong> Music</span>
+    </div>
+
+    <!-- PRELOADER / SYSTEM LOADER SCREEN -->
+    <div id="preloader" class="fixed inset-0 bg-cyber-bg z-[9999] flex flex-col justify-center items-center px-6">
+        <div class="max-w-md w-full glass-card-neon p-8 rounded-2xl scanlines border-blue-500/30">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500 animate-pulse delay-100"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500 animate-pulse delay-200"></div>
+                <span class="font-mono text-xs text-blue-400 tracking-wider">GAPCHU_ROY_OS_v1.0.9</span>
             </div>
             
-            <div class="flex items-center space-x-4">
-                <!-- Status Sync Badge Layout -->
-                <div id="connection-status" class="flex items-center space-x-2 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full text-xs">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-                        <span id="status-dot" class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                    </span>
-                    <span id="status-text" class="font-medium text-slate-700">Connecting...</span>
-                </div>
+            <div class="font-mono text-sm text-purple-300 mb-4 space-y-2">
+                <p id="loader-line-1">&gt; Initiating memory decryption protocols...</p>
+                <p id="loader-line-2" class="opacity-0">&gt; Locating pirate archives (720p quality)...</p>
+                <p id="loader-line-3" class="opacity-0">&gt; Bypassing Class 9 proxy filters...</p>
+                <p id="loader-line-4" class="opacity-0">&gt; Injecting highly concentrated Otterness...</p>
+                <p id="loader-line-5" class="opacity-0 text-green-400 font-bold">&gt; SYSTEM COMPROMISED. BROTHERHOOD VERIFIED. 🗿</p>
+            </div>
 
-                <button id="btn-manual-sync" class="p-2 text-slate-400 hover:text-slate-700 rounded-lg transition" title="Force Recalculation Check">
-                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+            <!-- Custom Cyber Progress Bar -->
+            <div class="w-full bg-purple-950/40 rounded-full h-2.5 mb-6 overflow-hidden border border-purple-500/20">
+                <div id="loader-progress-bar" class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 h-full w-0 transition-all duration-300 ease-out"></div>
+            </div>
+
+            <button id="loader-trigger-btn" class="hover-target w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 py-3.5 rounded-xl font-display font-bold tracking-wider text-sm text-white opacity-40 cursor-not-allowed transition-all duration-300 shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:brightness-110" disabled>
+                INITIALIZING...
+            </button>
+        </div>
+    </div>
+
+
+    <!-- HERO / LANDING SECTION -->
+    <section id="hero-section" class="relative min-h-screen flex flex-col justify-center items-center px-6 pt-20 z-10 select-none overflow-hidden">
+        <!-- Interactive 3D Cyber Grid in Backdrop -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(18,10,36,0.25)_1.5px,transparent_1.5px),linear-gradient(90deg,rgba(18,10,36,0.25)_1.5px,transparent_1.5px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none"></div>
+
+        <div class="text-center max-w-4xl relative">
+            <!-- Glowing Tagline Header -->
+            <div class="inline-flex items-center gap-2 glass-card px-4 py-1.5 rounded-full border-purple-500/30 mb-8 animate-pulse shadow-[0_0_15px_rgba(168,85,247,0.1)]">
+                <span class="w-2 h-2 rounded-full bg-purple-500 animate-ping"></span>
+                <span class="text-xs font-mono font-bold uppercase tracking-[0.25em] text-purple-300">INTERNET MEMORY SYSTEM DETECTED</span>
+            </div>
+
+            <!-- Glitched Big Birthday Title -->
+            <h1 class="text-5xl md:text-8xl font-display font-black tracking-tighter uppercase mb-6 leading-none">
+                <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 glitch-text" data-text="HAPPY BIRTHDAY">HAPPY BIRTHDAY</span>
+                <span class="block text-white mt-2 relative">
+                    GAPCHU ROYAL <span class="inline-block animate-bounce">🎂</span>
+                </span>
+            </h1>
+
+            <!-- Emotional/Chaotic Quote -->
+            <p class="text-lg md:text-2xl font-mono text-gray-300 mb-12 max-w-2xl mx-auto border-y border-purple-500/10 py-4 font-bold tracking-wide">
+                “Started with <span class="text-blue-400 font-bold">'baith jau'</span>... ended up becoming brothers <span class="text-pink-500 font-semibold text-xl">🗿❤️</span>”
+            </p>
+
+            <!-- Enter the Lore dramatic Button -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="#section-beginning" class="hover-target group relative px-10 py-5 bg-transparent rounded-2xl overflow-hidden font-display font-bold text-lg tracking-wider text-white border border-purple-500/50 shadow-[0_0_30px_rgba(168,85,247,0.2)] hover:border-pink-500 transition-all duration-300 max-w-xs w-full">
+                    <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20 group-hover:from-blue-600/40 group-hover:via-purple-600/40 group-hover:to-pink-600/40 transition-all duration-300"></span>
+                    <span class="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500 -z-10"></span>
+                    <span class="relative z-10 flex items-center justify-center gap-3">
+                        ENTER THE LORE 🔮
+                        <i class="fa-solid fa-arrow-down animate-bounce text-sm text-pink-400"></i>
+                    </span>
+                </a>
+                <button onclick="scrollToGame()" class="hover-target px-8 py-5 glass-card rounded-2xl border-blue-500/20 hover:border-blue-500/60 transition-all duration-300 text-sm font-mono text-blue-400 max-w-xs w-full flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-gamepad text-base"></i> RUN ARCADE MINI-GAME
                 </button>
             </div>
         </div>
-    </header>
 
-    <!-- MAIN WORKSPACE -->
-    <main class="flex-grow flex flex-col relative z-10 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 flex flex-col items-center gap-2 font-mono text-xs opacity-50">
+            <span>SCROLL TO START DECRYPTING</span>
+            <div class="w-1 h-8 bg-gradient-to-b from-blue-500 to-transparent rounded-full animate-pulse"></div>
+        </div>
+    </section>
 
-        <!-- ==================== VIEW 1: PROFILE SETUP FORM ==================== -->
-        <div id="view-setup" class="w-full max-w-xl mx-auto hidden py-6">
-            <div class="premium-card rounded-2xl p-6 sm:p-8 space-y-6">
-                <div class="space-y-2">
-                    <h2 class="text-2xl font-semibold tracking-tight text-slate-900">Baseline Registration</h2>
-                    <p class="text-slate-500 text-sm leading-relaxed">
-                        Lock in your profile architecture below. Drift automatically sets up dynamic checklist systems matching your caliber.
+
+    <!-- SECTION 1 — THE BEGINNING -->
+    <section id="section-beginning" class="relative min-h-screen flex flex-col justify-center py-24 px-6 z-10 border-t border-purple-500/10">
+        <div class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            
+            <!-- Dynamic Cinematic Visual Storytelling Column -->
+            <div class="flex flex-col justify-center">
+                <div class="inline-flex items-center gap-2 font-mono text-sm text-blue-400 mb-4 tracking-wider">
+                    <span>EPOCH I: YEAR 2019</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    <span>CLASS 9 DECRYPTION</span>
+                </div>
+                
+                <h2 class="text-4xl md:text-5xl font-display font-black tracking-tight mb-8 leading-tight">
+                    THE DAY THE <br class="hidden md:inline">SYSTEM RE-ALIGNED
+                </h2>
+                
+                <div class="space-y-6 text-gray-300 font-sans text-base md:text-lg leading-relaxed border-l-2 border-purple-500/30 pl-6">
+                    <p class="story-fade-in opacity-30 transition-all duration-1000">
+                        Ankur was completely new to the class. A wild, chaotic soul lost in the grid, scanning the classroom filled with strange faces, searching desperately for a port to connect.
+                    </p>
+                    <p class="story-fade-in opacity-30 transition-all duration-1000">
+                        The classroom was loud, but a single workspace remained partially unoccupied on the very first bench. 
+                    </p>
+                    <p class="story-fade-in opacity-30 transition-all duration-1000 font-mono text-blue-300 bg-blue-950/20 p-4 rounded-xl border border-blue-500/10">
+                        "He walked up to the desk, stared right into my soul, and uttered the ultimate genesis question that started it all..."
                     </p>
                 </div>
+            </div>
 
-                <form id="setup-form" class="space-y-5">
-                    <div class="space-y-1">
-                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Daily Routine</label>
-                        <textarea id="daily_routines" required rows="2" 
-                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-400"
-                            placeholder="e.g., Wake up late, attend classes, code app ideas in evening, sleep at 2 AM."></textarea>
+            <!-- Interactive Classroom Simulator Component -->
+            <div class="glass-card-neon p-8 rounded-3xl relative scanlines border-purple-500/20 overflow-hidden flex flex-col items-center justify-center min-h-[420px]">
+                <div class="absolute top-4 left-4 font-mono text-xs text-purple-400 tracking-widest uppercase">
+                    SYSTEM STATUS: CLASSROOM_SIM.EXE
+                </div>
+                
+                <!-- Blackboard Background Visual -->
+                <div class="w-full bg-emerald-950/60 rounded-xl border-4 border-amber-950 p-6 shadow-inner relative flex flex-col justify-center items-center h-48 mb-8 overflow-hidden">
+                    <div class="absolute top-2 left-3 text-white/20 font-mono text-[9px]">CHALKBOARD v1.2</div>
+                    <!-- chalk drawings -->
+                    <div class="text-center font-display text-emerald-100/40 select-none text-xs italic space-y-1">
+                        <p>1. C++ Programming Basics</p>
+                        <p>2. Linear Equations in 2 Variables</p>
+                        <p>3. Do NOT make noise! - Teacher</p>
                     </div>
 
-                    <div class="space-y-1">
-                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Long-Term Targets & Ambitions</label>
-                        <textarea id="goals_and_ambitions" required rows="2" 
-                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-400"
-                            placeholder="e.g., Target top medical college selection while building scalable software models."></textarea>
+                    <!-- Triggerable Speech Bubble Visuals -->
+                    <div id="baith-jau-bubble" class="absolute left-6 top-8 bg-white text-gray-900 rounded-2xl py-2 px-4 text-xs font-bold shadow-xl scale-0 transition-all duration-500 origin-bottom-right">
+                        "baith jau?" 🤔
+                        <div class="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-3 h-3 bg-white"></div>
                     </div>
 
-                    <div class="space-y-1">
-                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Current Focus Bleeds & Leaks</label>
-                        <textarea id="distractions_and_leaks" required rows="2" 
-                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-400"
-                            placeholder="e.g., Intense doomscrolling on forums when code bugs or assignments get tough."></textarea>
+                    <div id="baith-jao-bubble" class="absolute right-6 top-20 bg-blue-500 text-white rounded-2xl py-2 px-4 text-xs font-bold shadow-xl scale-0 transition-all duration-500 origin-bottom-left">
+                        "baith jao" 🗿🤝
+                        <div class="absolute bottom-0 left-4 transform translate-y-1/2 rotate-45 w-3 h-3 bg-blue-500"></div>
                     </div>
+                </div>
 
-                    <div class="pt-2 border-t border-slate-100 space-y-4">
-                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500">Initial Metric Sliders</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-1">
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-600">Consistency Rating</span>
-                                    <span id="val-consistency" class="text-blue-600 font-bold">5/10</span>
-                                </div>
-                                <input type="range" id="consistency_level" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-consistency').innerText = this.value + '/10'">
-                            </div>
-
-                            <div class="space-y-1">
-                                <div class="flex justify-between text-xs">
-                                    <span class="text-slate-600">Resilience Index</span>
-                                    <span id="val-resilience" class="text-blue-600 font-bold">5/10</span>
-                                </div>
-                                <input type="range" id="resilience_level" min="1" max="10" value="5" class="w-full" oninput="document.getElementById('val-resilience').innerText = this.value + '/10'">
-                            </div>
+                <!-- Desks Visual Layer -->
+                <div class="flex justify-around w-full gap-4 relative z-10">
+                    <!-- Left Desk (User Workspace) -->
+                    <div class="w-1/3 flex flex-col items-center">
+                        <div class="text-4xl animate-bounce">💻</div>
+                        <div class="bg-amber-800/80 rounded-t-lg h-10 w-full mt-2 flex items-center justify-center text-[10px] font-mono border-t border-amber-600">
+                            YOUR DESK
                         </div>
                     </div>
+                    
+                    <!-- Space Between Desks -->
+                    <div class="flex items-center justify-center">
+                        <span class="text-3xl text-purple-500/50">⚡</span>
+                    </div>
 
-                    <button type="submit" id="btn-submit-setup" class="w-full py-3.5 px-6 bg-[#0071e3] hover:bg-blue-600 text-white font-medium rounded-xl transition duration-200 flex items-center justify-center space-x-2 shadow-sm text-sm">
-                        <span>Lock In Profile Parameters</span>
-                        <i data-lucide="lock" class="w-4 h-4"></i>
-                    </button>
-                </form>
+                    <!-- Right Desk (Ankur Workspace) -->
+                    <div class="w-1/3 flex flex-col items-center transition-all duration-500" id="ankur-seat">
+                        <div id="ankur-emoji" class="text-4xl transition-transform duration-500 translate-y-[-100px] opacity-0">🦦</div>
+                        <div class="bg-amber-800/80 rounded-t-lg h-10 w-full mt-2 flex items-center justify-center text-[10px] font-mono border-t border-amber-600">
+                            ANKUR'S DESK
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Trigger Button -->
+                <button onclick="triggerClassroomSim()" class="hover-target mt-8 px-6 py-3 bg-purple-600 hover:bg-purple-500 rounded-xl font-mono text-xs font-bold tracking-widest uppercase text-white shadow-lg shadow-purple-900/40 border border-purple-400/30 transition-all duration-300">
+                    ACTIVATE INTERACTION PROTOCOL 🛡️
+                </button>
             </div>
         </div>
+    </section>
 
-        <!-- ==================== VIEW 2: DRIFT MASTER DASHBOARD ==================== -->
-        <div id="view-dashboard" class="w-full space-y-6 hidden">
+
+    <!-- SECTION 2 — THE CHAOTIC FRIENDSHIP ARC -->
+    <section id="section-jokes" class="relative min-h-screen flex flex-col justify-center py-24 px-6 z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950/20 via-cyber-bg to-cyber-bg">
+        <div class="max-w-6xl mx-auto w-full">
             
-            <!-- Locked Profile Metadata Summary Banner -->
-            <div class="premium-card bg-slate-50 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs text-slate-600">
-                <div class="flex items-center space-x-2">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-blue-500"></i>
-                    <span><strong>Locked Coordinates Profile:</strong> Core system tracking active parameters.</span>
+            <div class="text-center mb-16">
+                <span class="font-mono text-xs text-pink-400 tracking-[0.2em] uppercase">EPOCH II: CHAOS ENGINE INITIALIZED</span>
+                <h2 class="text-4xl md:text-6xl font-display font-black uppercase tracking-tight mt-2">
+                    THE ARCHIVES OF CHAOS
+                </h2>
+                <p class="text-gray-400 font-mono mt-4 text-sm max-w-lg mx-auto">
+                    Hover cards to trigger high-voltage meme memory matrix. Uncompressing inside jokes...
+                </p>
+            </div>
+
+            <!-- 3D Perspective Grid of Inside Jokes Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20 perspective-container">
+                
+                <!-- CARD 1: PIRATED -->
+                <div class="tilt-card glass-card p-6 rounded-2xl border-purple-500/20 hover:border-purple-400 transition-all duration-300 group flex flex-col justify-between" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-3xl">💿</span>
+                            <span class="font-mono text-[10px] text-purple-400/60 uppercase">CORE_JOKE_01</span>
+                        </div>
+                        <h3 class="text-xl font-display font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">PIRATED</h3>
+                        <p class="text-xs text-gray-400 font-mono leading-relaxed">
+                            Why buy original license codes when crack servers exist? The lifestyle, the ethos, the constant search for safe torrent links.
+                        </p>
+                    </div>
+                    <div class="mt-6 border-t border-purple-500/10 pt-4 flex justify-between items-center text-[10px] font-mono text-purple-400">
+                        <span>TAG: LEGENDARY</span>
+                        <i class="fa-solid fa-cloud-arrow-down animate-pulse"></i>
+                    </div>
                 </div>
-                <div class="flex items-center space-x-3">
-                    <span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span> Operating Streak: 4 Days
-                    </span>
+
+                <!-- CARD 2: 720p -->
+                <div class="tilt-card glass-card p-6 rounded-2xl border-blue-500/20 hover:border-blue-400 transition-all duration-300 group flex flex-col justify-between" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-3xl">📺</span>
+                            <span class="font-mono text-[10px] text-blue-400/60 uppercase">CORE_JOKE_02</span>
+                        </div>
+                        <h3 class="text-xl font-display font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">720p QUALITY</h3>
+                        <p class="text-xs text-gray-400 font-mono leading-relaxed">
+                            "Bhai 1080p high storage use karega." 720p was always the sweet spot of absolute low bandwidth peak cinema entertainment.
+                        </p>
+                    </div>
+                    <div class="mt-6 border-t border-blue-500/10 pt-4 flex justify-between items-center text-[10px] font-mono text-blue-400">
+                        <span>TAG: OPTIMIZED</span>
+                        <i class="fa-solid fa-compress"></i>
+                    </div>
+                </div>
+
+                <!-- CARD 3: BHIDLE AJA -->
+                <div class="tilt-card glass-card p-6 rounded-2xl border-pink-500/20 hover:border-pink-400 transition-all duration-300 group flex flex-col justify-between" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-3xl">🤺</span>
+                            <span class="font-mono text-[10px] text-pink-400/60 uppercase">CORE_JOKE_03</span>
+                        </div>
+                        <h3 class="text-xl font-display font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">BHIDLE AJA</h3>
+                        <p class="text-xs text-gray-400 font-mono leading-relaxed">
+                            No fear, absolute chaotic energy. A high-voltage command issued before embarking on severe verbal warfare inside classrooms.
+                        </p>
+                    </div>
+                    <div class="mt-6 border-t border-pink-500/10 pt-4 flex justify-between items-center text-[10px] font-mono text-pink-400">
+                        <span>TAG: HOSTILE_ENERGY</span>
+                        <i class="fa-solid fa-fire animate-bounce"></i>
+                    </div>
+                </div>
+
+                <!-- CARD 4: OTTER BOI -->
+                <div class="tilt-card glass-card p-6 rounded-2xl border-green-500/20 hover:border-green-400 transition-all duration-300 group flex flex-col justify-between" onmousemove="handleTilt(event, this)" onmouseleave="resetTilt(this)">
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-3xl">🦦</span>
+                            <span class="font-mono text-[10px] text-green-400/60 uppercase">CORE_JOKE_04</span>
+                        </div>
+                        <h3 class="text-xl font-display font-bold text-white mb-2 group-hover:text-green-400 transition-colors">OTTER BOI</h3>
+                        <p class="text-xs text-gray-400 font-mono leading-relaxed">
+                            A majestic beast, relaxed but dangerous. Symbolizing peak laziness and highly evolved intelligence mixed with unparalleled style.
+                        </p>
+                    </div>
+                    <div class="mt-6 border-t border-green-500/10 pt-4 flex justify-between items-center text-[10px] font-mono text-green-400">
+                        <span>TAG: SOUL_ANIMAL</span>
+                        <i class="fa-solid fa-id-badge"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- FRIENDSHIP ANALYSIS SYSTEM -->
+            <div class="max-w-3xl mx-auto glass-card-neon p-8 rounded-3xl scanlines relative border-pink-500/20">
+                <div class="absolute top-4 right-4 flex items-center gap-1.5 font-mono text-[10px] text-pink-400">
+                    <span class="w-1.5 h-1.5 bg-pink-500 rounded-full animate-ping"></span>
+                    <span>REAL-TIME ANALYSIS MOD</span>
+                </div>
+                
+                <h3 class="font-mono text-sm uppercase text-gray-400 mb-6">
+                    &gt; FRIENDSHIP_SCANNER_v4.4.bat
+                </h3>
+
+                <!-- Hologram Status Bar -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-center">
+                    <div class="p-4 rounded-xl bg-purple-950/20 border border-purple-500/10 font-mono">
+                        <span class="block text-xs text-gray-500 uppercase">Meme Index</span>
+                        <strong class="text-xl text-purple-300">99,942.2</strong>
+                    </div>
+                    <div class="p-4 rounded-xl bg-blue-950/20 border border-blue-500/10 font-mono">
+                        <span class="block text-xs text-gray-500 uppercase">IQ Compression</span>
+                        <strong class="text-xl text-blue-300">720p Peak</strong>
+                    </div>
+                    <div class="p-4 rounded-xl bg-pink-950/20 border border-pink-500/10 font-mono">
+                        <span class="block text-xs text-gray-500 uppercase">Psychopathy Meter</span>
+                        <strong class="text-xl text-pink-300">99% Savage</strong>
+                    </div>
+                </div>
+
+                <!-- Scanning Progress Box -->
+                <div class="bg-black/40 p-5 rounded-2xl border border-white/5 font-mono text-xs text-green-400/90 mb-8 space-y-1">
+                    <p id="scan-terminal-line">&gt; Ready for scan. Press 'RUN DIAGNOSTIC' below...</p>
+                    <p id="scan-result-line" class="text-pink-400 font-bold hidden">&gt; DIAGNOSTIC FAIL: Unreasonably Dangerous Friendship Detected 🗿</p>
+                </div>
+
+                <div class="flex justify-center">
+                    <button onclick="runFriendshipDiagnostic()" id="scan-btn" class="hover-target px-10 py-4 bg-gradient-to-r from-pink-600 to-purple-600 rounded-xl font-mono text-xs font-bold tracking-widest uppercase hover:brightness-110 shadow-lg shadow-pink-950/30 border border-pink-400/30 transition-all duration-300">
+                        RUN FRIENDSHIP DIAGNOSTIC 🛡️
+                    </button>
                 </div>
             </div>
 
-            <!-- Dashboard Split Column Framework Layout -->
-            <div class="lg:grid lg:grid-cols-12 lg:gap-6 space-y-6 lg:space-y-0">
+        </div>
+    </section>
+
+
+    <!-- SECTION 3 — CLASS 10 MEMORIES (EMOTIONAL SHIFT) -->
+    <section id="section-class10" class="relative min-h-screen flex flex-col justify-center py-24 px-6 z-10 border-y border-purple-500/10 overflow-hidden">
+        
+        <!-- Background Neon Grid Panel (faded red/purple) -->
+        <div class="absolute inset-0 bg-[linear-gradient(rgba(244,63,94,0.03)_1.5px,transparent_1.5px),linear-gradient(90deg,rgba(244,63,94,0.03)_1.5px,transparent_1.5px)] bg-[size:50px_50px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto w-full relative">
+            <div class="text-center mb-16">
+                <span class="font-mono text-xs text-pink-500 tracking-[0.2em] uppercase">EPOCH III: THE TEMPORAL SHIFT</span>
+                <h2 class="text-4xl md:text-6xl font-display font-black tracking-tight mt-2">
+                    CLASS 10 SYNERGY
+                </h2>
+                <p class="text-gray-400 font-mono text-sm max-w-md mx-auto mt-4">
+                    The golden era. The division of units, the prophecy of memories.
+                </p>
+            </div>
+
+            <!-- Visual Memory Arc Sequence -->
+            <div class="space-y-12 relative before:absolute before:inset-y-0 before:left-4 md:before:left-1/2 before:w-[2px] before:bg-gradient-to-b before:from-blue-500 before:via-purple-500 before:to-pink-500 before:opacity-30">
                 
-                <!-- LEFT PANE: ANALYTICS INDEX CARD DECK (4 Cols) -->
-                <div class="lg:col-span-4 space-y-4">
-                    <!-- Growth Progress -->
-                    <div class="premium-card rounded-xl p-5 border-l-4 border-l-[#1a73e8]">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">System Momentum</span>
-                            <i data-lucide="activity" class="w-4 h-4 text-blue-500"></i>
+                <!-- MEMORY ITEM 1 -->
+                <div class="relative flex flex-col md:flex-row md:justify-between items-start md:items-center">
+                    <div class="absolute left-4 md:left-1/2 -translate-x-[7px] md:-translate-x-1.5 w-3.5 h-3.5 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)] border-2 border-white"></div>
+                    <div class="w-full md:w-[45%] glass-card p-6 rounded-2xl border-blue-500/10 ml-8 md:ml-0 md:text-right">
+                        <span class="font-mono text-xs text-blue-400">STAGE 01</span>
+                        <h4 class="font-display font-bold text-lg text-white mt-1">Section Synergy</h4>
+                        <p class="text-xs text-gray-400 font-mono mt-2">
+                            Finally re-grouped in the exact same physical classroom. Peak comedy, mocking board exam syllabus, sleeping under full air conditioning, eating tiffins on back benches.
+                        </p>
+                    </div>
+                    <div class="w-full md:w-[45%] hidden md:block"></div>
+                </div>
+
+                <!-- MEMORY ITEM 2 -->
+                <div class="relative flex flex-col md:flex-row md:justify-between items-start md:items-center md:flex-row-reverse">
+                    <div class="absolute left-4 md:left-1/2 -translate-x-[7px] md:-translate-x-1.5 w-3.5 h-3.5 bg-purple-500 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.8)] border-2 border-white"></div>
+                    <div class="w-full md:w-[45%] glass-card p-6 rounded-2xl border-purple-500/10 ml-8 md:ml-0">
+                        <span class="font-mono text-xs text-purple-400">STAGE 02</span>
+                        <h4 class="font-display font-bold text-lg text-white mt-1">The Prophecy</h4>
+                        <p class="text-xs text-gray-400 font-mono mt-2">
+                            During peak chaos, a random whisper was registered. "Bhai ye sab future me yaad ayega." A prophetic statement made by you that slowly turned from standard talk into emotional reality.
+                        </p>
+                    </div>
+                    <div class="w-full md:w-[45%] hidden md:block"></div>
+                </div>
+
+                <!-- MEMORY ITEM 3 -->
+                <div class="relative flex flex-col md:flex-row md:justify-between items-start md:items-center">
+                    <div class="absolute left-4 md:left-1/2 -translate-x-[7px] md:-translate-x-1.5 w-3.5 h-3.5 bg-pink-500 rounded-full shadow-[0_0_10px_rgba(236,72,153,0.8)] border-2 border-white"></div>
+                    <div class="w-full md:w-[45%] glass-card p-6 rounded-2xl border-pink-500/20 ml-8 md:ml-0 md:text-right bg-gradient-to-br from-pink-950/20 to-cyber-bg">
+                        <span class="font-mono text-xs text-pink-400">STAGE 03 (THE GLITCH)</span>
+                        <h4 class="font-display font-bold text-lg text-white mt-1">Section Restructure</h4>
+                        <p class="text-xs text-gray-400 font-mono mt-2">
+                            Just 10 to 20 days into this absolute synergy, administrative protocols glitched. School suddenly shifted Ankur to another section. Physical connection was cut, but the brotherhood was already deep-compiled.
+                        </p>
+                    </div>
+                    <div class="w-full md:w-[45%] hidden md:block"></div>
+                </div>
+
+            </div>
+
+            <!-- Intersecting Quote element -->
+            <div class="mt-16 text-center">
+                <blockquote class="text-lg md:text-xl font-display font-semibold italic text-purple-300">
+                    "And just like that... those 15 days became some of our greatest core memories."
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- SECTION 4 — FIRST OUTSIDE SCHOOL MEET (WALK & SPY DOG) -->
+    <section id="section-walk" class="relative min-h-screen flex flex-col justify-center py-24 px-6 z-10 overflow-hidden bg-gradient-to-b from-cyber-bg to-[#0b0416]">
+        
+        <!-- Night Walk Sky Grid -->
+        <div class="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-purple-950/20 to-transparent pointer-events-none"></div>
+
+        <div class="max-w-6xl mx-auto w-full">
+            <div class="text-center mb-12">
+                <span class="font-mono text-xs text-blue-400 tracking-[0.2em] uppercase">EPOCH IV: SUBURBAN RECONNAISSANCE</span>
+                <h2 class="text-4xl md:text-5xl font-display font-black tracking-tight mt-2">
+                    THE NIGHT WALK ARCHIVE
+                </h2>
+                <p class="text-gray-400 font-mono text-sm max-w-xl mx-auto mt-4">
+                    The casual roam near uncle's sector, talking about future tech, space engines, and a highly suspicious canine field agent following behind.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Story Description -->
+                <div class="glass-card p-8 rounded-2xl border-blue-500/10">
+                    <h3 class="font-display text-2xl font-bold text-white mb-6">Mission Details: Target "Spy Dog"</h3>
+                    <div class="space-y-4 font-mono text-xs md:text-sm text-gray-300">
+                        <div class="flex items-start gap-3">
+                            <span class="text-blue-400 font-bold">&gt; LOCATION:</span>
+                            <span>Uncle's neighbourhood sector, night environment.</span>
                         </div>
-                        <div class="mt-4 flex items-baseline space-x-2">
-                            <span id="metric-consistency" class="text-3xl font-bold tracking-tight text-slate-900">--%</span>
-                            <span class="text-xs text-[#34a853] font-medium">Growth Velocity</span>
+                        <div class="flex items-start gap-3">
+                            <span class="text-purple-400 font-bold">&gt; OBJECTIVE:</span>
+                            <span>First proper non-school physical meetup. Roaming streets casually chatting.</span>
                         </div>
-                        <div class="mt-3 w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                            <div id="metric-consistency-bar" class="bg-[#1a73e8] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-pink-400 font-bold">&gt; INTEL REPORT:</span>
+                            <span class="text-pink-300">A mysterious, highly persistent rogue street dog initiated tailing sequences. Maintained exactly 5 meters tracking distance. Absolute tactical behavior. 😭🐕</span>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Mindset Level -->
-                    <div class="premium-card rounded-xl p-5 border-l-4 border-l-[#34a853]">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Opportunity Horizon</span>
-                            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-500"></i>
-                        </div>
-                        <div class="mt-4 flex items-baseline space-x-2">
-                            <span id="metric-mindset" class="text-3xl font-bold tracking-tight text-slate-900">--%</span>
-                            <span class="text-xs text-emerald-600 font-medium">Probability Index</span>
-                        </div>
-                        <div class="mt-3 w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                            <div id="metric-mindset-bar" class="bg-[#34a853] h-full rounded-full transition-all duration-500" style="width: 0%"></div>
-                        </div>
+                <!-- Scrolling Interactive Animation Screen -->
+                <div class="glass-card-neon p-6 rounded-3xl relative border-purple-500/20 h-80 flex flex-col justify-end overflow-hidden scanlines">
+                    <div class="absolute top-4 left-4 font-mono text-[10px] text-purple-400/80 uppercase">
+                        ANIMATION_LOOP: WALK_RADAR.EXE
                     </div>
 
-                    <!-- Radial Stress Ring Metric -->
-                    <div class="premium-card rounded-xl p-5 flex flex-col items-center text-center relative border-l-4 border-l-[#ea4335]">
-                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider self-start">Friction Index</span>
+                    <!-- Stars Backdrop in Box -->
+                    <div class="absolute inset-0 bg-black/40 -z-10 rounded-2xl">
+                        <!-- Custom star sparks -->
+                        <div class="absolute top-8 left-1/4 w-1 h-1 bg-white rounded-full animate-ping"></div>
+                        <div class="absolute top-16 right-1/3 w-1 h-1 bg-white rounded-full animate-pulse"></div>
+                    </div>
+
+                    <!-- Undercover Spy Dog Tracking Arena -->
+                    <div class="relative w-full h-40 overflow-hidden mb-6">
+                        <!-- Neon Cyber Street Ground -->
+                        <div class="absolute bottom-0 inset-x-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(168,85,247,0.8)]"></div>
                         
-                        <div class="relative my-4 flex items-center justify-center">
-                            <svg class="w-24 h-24 transform -rotate-90">
-                                <circle cx="48" cy="48" r="40" stroke="#e5e5ea" stroke-width="5" fill="transparent"/>
-                                <circle id="stress-ring" cx="48" cy="48" r="40" stroke="#ea4335" stroke-width="5" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="transition-all duration-500"/>
-                            </svg>
-                            <div class="absolute flex flex-col items-center">
-                                <span id="metric-stress" class="text-2xl font-bold text-slate-900">--</span>
-                                <span class="text-[9px] text-slate-400 font-medium">Stress Tracker</span>
-                            </div>
+                        <!-- Floating Emojis representing characters moving on the path -->
+                        <!-- YOU -->
+                        <div class="absolute bottom-1 left-[30%] -translate-x-1/2 flex flex-col items-center animate-bounce duration-700">
+                            <span class="text-3xl">💻</span>
+                            <span class="bg-blue-600 text-white font-mono text-[8px] px-1.5 py-0.5 rounded-full mt-1">YOU</span>
                         </div>
-                        <div id="stress-descriptor" class="text-xs font-medium text-slate-600">
-                            Stabilizing baseline...
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RIGHT PANE: SYSTEM ACTION GUIDES MATRIX (8 Cols) -->
-                <div class="lg:col-span-8 space-y-6">
-                    <div class="premium-card rounded-xl p-6 space-y-4">
-                        <div class="pb-3 border-b border-slate-100">
-                            <h3 class="text-lg font-semibold text-slate-900 tracking-tight">Active Operation Directives</h3>
-                            <p class="text-slate-500 text-xs mt-0.5">Check off items as completed to update your metrics ecosystem live.</p>
+                        
+                        <!-- ANKUR -->
+                        <div class="absolute bottom-1 left-[50%] -translate-x-1/2 flex flex-col items-center animate-bounce duration-1000">
+                            <span class="text-3xl">🦦</span>
+                            <span class="bg-purple-600 text-white font-mono text-[8px] px-1.5 py-0.5 rounded-full mt-1">ANKUR</span>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Instant Matrix Column -->
-                            <div class="space-y-3">
-                                <div class="flex items-center space-x-2 text-blue-600 font-medium text-xs uppercase tracking-wider">
-                                    <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-                                    <span>Instant Corrections</span>
-                                </div>
-                                <div id="container-instant-corrections" class="space-y-2"></div>
-                            </div>
-
-                            <!-- Long Term Column -->
-                            <div class="space-y-3">
-                                <div class="flex items-center space-x-2 text-emerald-600 font-medium text-xs uppercase tracking-wider">
-                                    <i data-lucide="target" class="w-3.5 h-3.5"></i>
-                                    <span>Long-Term Tracking</span>
-                                </div>
-                                <div id="container-longterm-targets" class="space-y-2"></div>
-                            </div>
+                        <!-- SPY DOG (following slightly behind) -->
+                        <div class="absolute bottom-1 left-[10%] flex flex-col items-center animate-pulse duration-500" id="spy-dog-element">
+                            <span class="text-3xl">🐕</span>
+                            <span class="bg-red-600 text-white font-mono text-[8px] px-1.5 py-0.5 rounded-full mt-1 tracking-wider animate-pulse">SPY_AGENT</span>
                         </div>
                     </div>
 
-                    <!-- REALTIME RECALIBRATION INTERACTION DECK -->
-                    <div class="premium-card rounded-xl p-5 space-y-3 border-t-2 border-t-[#fbbc05]">
-                        <div class="flex items-start space-x-3">
-                            <div class="p-1.5 bg-amber-50 rounded-lg text-amber-600 border border-amber-200">
-                                <i data-lucide="sliders" class="w-4 h-4"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-sm font-semibold text-slate-900">Trajectory Realignment Console</h3>
-                                <p class="text-slate-500 text-xs">Targets unrealistic or schedule changed? Drop quick notes here to re-align coordinates.</p>
-                            </div>
-                        </div>
-
-                        <form id="recalibrate-form" class="space-y-3 pt-1">
-                            <textarea id="recalibrate_input" required rows="2"
-                                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-blue-500 placeholder:text-slate-400"
-                                placeholder="e.g., Physics chapter is taking double the time. Tone down the immediate long-term coding speed target."></textarea>
-                            <div class="flex justify-end">
-                                <button type="submit" id="btn-recalibrate" class="w-full sm:w-auto px-5 py-2 bg-[#0071e3] hover:bg-blue-600 text-white font-medium text-xs rounded-lg transition flex items-center justify-center space-x-1.5 shadow-sm">
-                                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                                    <span>Recalibrate Operating Framework</span>
-                                </button>
-                            </div>
-                        </form>
+                    <!-- Interactive controls inside simulation box -->
+                    <div class="flex justify-between items-center bg-black/50 p-3 rounded-xl border border-white/5">
+                        <span class="font-mono text-[10px] text-gray-500">PROXIMITY RADAR ACTIVE</span>
+                        <button onclick="scareSpyDog()" class="hover-target px-4 py-1.5 bg-red-950/50 hover:bg-red-900/40 text-red-400 hover:text-red-300 border border-red-500/20 rounded-lg font-mono text-xs transition-all duration-300">
+                            SCAN FOR CANINE SIGNALS 📡
+                        </button>
                     </div>
 
                 </div>
+
             </div>
         </div>
-    </main>
+    </section>
 
-    <!-- FOOTER -->
-    <footer class="border-t border-[#e5e5ea] bg-white py-4 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-400">
-            &copy; 2026 Drift Operating System. Relational Database Verification Active.
-        </div>
-    </footer>
 
-    <!-- INTERACTION LOGIC WORKSPACE -->
-    <script>
-        const API_BASE_URL = 'http://127.0.0.1:8000/api/v1';
-        let isDemoMode = false;
-
-        // Fallback robust sandbox mock database structure
-        const mockDatabase = {
-            metrics: { live_growth_velocity: 60.0, live_opportunity_probability: 75.0, live_stress_level: 4.0 },
-            targets: [
-                { id: 101, target_type: "instant", description: "Clear current visual desktop clutter to restore sensory focus", is_completed: 0 },
-                { id: 102, target_type: "instant", description: "Execute immediate 10-minute structural calendar block window", is_completed: 0 },
-                { id: 103, target_type: "long_term", description: "Enforce locked 11:30 PM absolute sleep preparation protocol", is_completed: 0 }
-            ]
-        };
-
-        function showNotification(title, text, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            let icon = 'info', iconColor = 'text-blue-500', bg = 'bg-white', border = 'border-slate-200';
+    <!-- SECTION 5 — RETRO GAME (THE ARCADE CHALLENGE) -->
+    <section id="section-game" class="relative min-h-screen flex flex-col justify-center py-24 px-6 z-10 border-b border-purple-500/10">
+        <div class="max-w-4xl mx-auto w-full">
             
-            if (type === 'success') { icon = 'check-circle'; iconColor = 'text-emerald-500'; }
-            else if (type === 'error') { icon = 'alert-triangle'; iconColor = 'text-rose-500'; }
+            <div class="text-center mb-12">
+                <span class="font-mono text-xs text-purple-400 tracking-[0.2em] uppercase">EPOCH V: INTERACTIVE UNLOCK CHANNELS</span>
+                <h2 class="text-4xl md:text-5xl font-display font-black tracking-tight mt-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-400 uppercase">
+                    GAPCHU RETRO ARCADE
+                </h2>
+                <p class="text-gray-400 font-mono text-sm max-w-lg mx-auto mt-4">
+                    Catch falling <strong class="text-purple-300">Otters (🦦)</strong>. Avoid falling <strong class="text-red-400">720p Pirated energy (💿)</strong>. Score 10 points to unlock the hidden brother-level database message.
+                </p>
+            </div>
 
-            toast.className = `premium-card pointer-events-auto rounded-xl p-4 border ${border} ${bg} flex items-start space-x-3 transition-all duration-300 translate-x-12 opacity-0`;
-            toast.innerHTML = `
-                <div class="${iconColor} mt-0.5"><i data-lucide="${icon}" class="w-4 h-4"></i></div>
-                <div class="flex-grow space-y-0.5">
-                    <h5 class="text-xs font-bold uppercase tracking-wider text-slate-900">${title}</h5>
-                    <p class="text-xs text-slate-500 leading-normal">${text}</p>
+            <!-- Arcade Cabinet Box -->
+            <div class="glass-card-neon rounded-3xl border-2 border-purple-500/30 overflow-hidden relative shadow-[0_0_50px_rgba(168,85,247,0.15)] scanlines">
+                <!-- Arcade Header -->
+                <div class="bg-purple-950/40 border-b border-purple-500/20 px-6 py-4 flex justify-between items-center font-mono">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3.5 h-3.5 rounded-full bg-red-500 animate-pulse"></span>
+                        <span class="text-xs text-purple-200 tracking-wider">GAME_ENGINE: ACTIVE</span>
+                    </div>
+                    <div class="text-xs text-blue-400 font-bold" id="arcade-score-label">SCORE: 00 / 10</div>
                 </div>
-            `;
-            container.appendChild(toast);
-            lucide.createIcons();
-            setTimeout(() => toast.classList.remove('translate-x-12', 'opacity-0'), 50);
-            setTimeout(() => {
-                toast.classList.add('translate-x-12', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 4500);
-        }
 
-        function updateConnectionBadge(connected) {
-            const dot = document.getElementById('status-dot');
-            const txt = document.getElementById('status-text');
-            const badge = document.getElementById('connection-status');
-            if (connected) {
-                dot.className = 'relative inline-flex rounded-full h-2 w-2 bg-emerald-500';
-                txt.innerText = 'Connected Engine';
-                badge.className = 'flex items-center space-x-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-full text-xs text-emerald-800';
-            } else {
-                dot.className = 'relative inline-flex rounded-full h-2 w-2 bg-amber-500';
-                txt.innerText = 'Server Offline - Demo Code Active';
-                badge.className = 'flex items-center space-x-2 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full text-xs text-amber-800';
-            }
-        }
+                <!-- Game Screen Area (HTML Canvas) -->
+                <div class="relative bg-black/90 min-h-[350px] w-full flex items-center justify-center">
+                    
+                    <!-- Pre-start Screen Overlay -->
+                    <div id="game-intro-overlay" class="absolute inset-0 bg-black/80 z-20 flex flex-col justify-center items-center p-6 text-center">
+                        <span class="text-5xl mb-4">👾</span>
+                        <h4 class="font-display text-xl font-bold text-white mb-2 uppercase">MISSION: DEFEAT THE CLASS RESTRICTIONS</h4>
+                        <p class="font-mono text-xs text-gray-400 max-w-md mb-8">
+                            Control the catcher basket (YOUR DESK 💻) using Mouse, Touch, or Keyboard Arrow keys. Catch 10 Otters to unlock the decrypted transmission log.
+                        </p>
+                        <button onclick="startGame()" class="hover-target px-8 py-3.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-xl font-mono text-xs font-bold tracking-widest uppercase text-white shadow-lg hover:scale-105 transition-transform duration-300 border border-purple-400/20">
+                            BOOT MODULE ⚡
+                        </button>
+                    </div>
 
-        function switchView(targetView) {
-            if (targetView === 'setup') {
-                document.getElementById('view-dashboard').classList.add('hidden');
-                document.getElementById('view-setup').classList.remove('hidden');
-            } else {
-                document.getElementById('view-setup').classList.add('hidden');
-                document.getElementById('view-dashboard').classList.remove('hidden');
-            }
-            lucide.createIcons();
-        }
+                    <!-- Win Screen Overlay -->
+                    <div id="game-win-overlay" class="absolute inset-0 bg-black/95 z-20 flex flex-col justify-center items-center p-8 text-center hidden">
+                        <span class="text-5xl mb-4 animate-bounce">🏆</span>
+                        <h4 class="font-display text-2xl font-black text-green-400 mb-2 uppercase tracking-wide">SYSTEM DECRYPTED SUCCESSFULLY</h4>
+                        
+                        <!-- The Secret Decrypted Message Box -->
+                        <div class="glass-card-neon p-6 rounded-2xl border-green-500/30 max-w-lg mb-8 text-left relative overflow-hidden">
+                            <div class="absolute -right-12 -bottom-12 text-7xl text-purple-500/10 rotate-12 select-none pointer-events-none font-sans font-black">BROTHER</div>
+                            <h5 class="font-mono text-[10px] text-green-400 mb-2 uppercase tracking-widest border-b border-green-500/20 pb-1">TRANSMISSION LOG: DECRYPTED</h5>
+                            <p class="font-mono text-xs md:text-sm text-gray-200 leading-relaxed font-bold">
+                                "Ye kabhi upar upar ka friendship nahi tha. Tu actually mera bhai hai. We survived Class 9 benches, Class 10 restructures, coding grids, and outside streets. Thanks for existing, Gapchu. ❤️"
+                            </p>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <button onclick="resetGame()" class="hover-target px-6 py-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl font-mono text-xs uppercase text-white transition-colors">
+                                PLAY AGAIN
+                            </button>
+                        </div>
+                    </div>
 
-        function sendToRecalibrateBox(text) {
-            const inputField = document.getElementById('recalibrate_input');
-            inputField.value = `Target issue adjustment: "${text}". Please recalibrate this task criteria.`;
-            inputField.focus();
-            showNotification("Copied to Console", "Target copied below. Add comments and click Recalibrate.", "success");
-        }
+                    <!-- Main Playable Game Canvas -->
+                    <canvas id="game-canvas" class="w-full h-full cursor-none pointer-events-auto block"></canvas>
 
-        function renderChecklist(targets) {
-            const instantBox = document.getElementById('container-instant-corrections');
-            const longTermBox = document.getElementById('container-longterm-targets');
-            let ic = 0, lt = 0;
-            
-            instantBox.innerHTML = '';
-            longTermBox.innerHTML = '';
+                </div>
 
-            targets.forEach(t => {
-                const isInstant = t.target_type === 'instant';
-                const container = isInstant ? instantBox : longTermBox;
-                const row = document.createElement('div');
-                
-                row.className = 'flex items-start justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition group';
-                row.innerHTML = `
-                    <label class="flex items-start space-x-3 flex-grow cursor-pointer select-none">
-                        <input type="checkbox" data-id="${t.id}" ${t.is_completed ? 'checked' : ''} 
-                            class="target-toggle mt-0.5 w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 transition">
-                        <span class="text-xs text-slate-700 font-light leading-relaxed ${t.is_completed ? 'line-through text-slate-400' : ''}">
-                            ${t.description}
-                        </span>
-                    </label>
-                    <button class="text-[10px] text-slate-400 hover:text-amber-600 font-medium tracking-tight ml-2 opacity-0 group-hover:opacity-100 transition-all" onclick="sendToRecalibrateBox('${t.description}')">
-                        Too Hard?
+                <!-- Touch Alternative Control Pad for Mobile Users -->
+                <div class="p-4 bg-purple-950/20 border-t border-purple-500/10 flex justify-center items-center gap-6 lg:hidden">
+                    <button id="touch-left-btn" class="w-16 py-3 bg-purple-800/40 border border-purple-500/20 text-white rounded-xl active:bg-purple-600 active:scale-95 transition-all flex justify-center items-center">
+                        <i class="fa-solid fa-arrow-left text-lg"></i>
                     </button>
-                `;
+                    <span class="font-mono text-[10px] text-gray-500 uppercase">MOBILE TOUCH ASSIST</span>
+                    <button id="touch-right-btn" class="w-16 py-3 bg-purple-800/40 border border-purple-500/20 text-white rounded-xl active:bg-purple-600 active:scale-95 transition-all flex justify-center items-center">
+                        <i class="fa-solid fa-arrow-right text-lg"></i>
+                    </button>
+                </div>
+            </div>
 
-                row.querySelector('input').addEventListener('change', (e) => toggleTarget(t.id, e.target.checked));
-                container.appendChild(row);
-                if (isInstant) ic++; else lt++;
+        </div>
+    </section>
+
+
+    <!-- SECTION 6 — FINAL EMOTIONAL ENDING -->
+    <section id="section-ending" class="relative min-h-screen flex flex-col justify-center items-center py-24 px-6 z-10 bg-gradient-to-b from-[#0b0416] via-[#05000c] to-black text-center overflow-hidden">
+        
+        <!-- Ending Celebration Backdrop Canvas -->
+        <canvas id="fireworks-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+        <div class="max-w-4xl mx-auto relative z-10 flex flex-col justify-center items-center">
+            
+            <span class="font-mono text-sm text-pink-500 tracking-[0.2em] uppercase mb-4 animate-pulse">TRANSMISSION COMPLETE</span>
+            
+            <!-- Slow Cinematic Text Scroll Reveal -->
+            <div class="space-y-6 mb-12">
+                <p class="text-xl md:text-3xl font-display font-medium text-gray-400 italic">
+                    "From strangers on the first bench in Class 9..."
+                </p>
+                <p class="text-3xl md:text-5xl font-display font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 uppercase tracking-wide">
+                    To brothers for life 🗿❤️
+                </p>
+            </div>
+
+            <!-- Huge Ultimate Happy Birthday Callout -->
+            <div class="glass-card-neon p-8 md:p-12 rounded-3xl border-pink-500/30 shadow-[0_0_50px_rgba(236,72,153,0.2)] max-w-2xl mb-12 scanlines relative overflow-hidden">
+                <div class="absolute -top-12 -left-12 text-9xl text-pink-500/5 font-black rotate-12 select-none pointer-events-none">ROY</div>
+                
+                <h2 class="text-4xl md:text-6xl font-display font-black uppercase mb-4 tracking-tighter text-white">
+                    HAPPY BIRTHDAY <br>ANKUR ROY! 🎉
+                </h2>
+                
+                <p class="text-gray-300 font-mono text-sm md:text-base leading-relaxed tracking-wider">
+                    "Keep building systems, keep cracking licenses, keep staying absolutely dangerous... and always stay an otter boi." 🦦🛡️
+                </p>
+
+                <!-- Firework trigger indicator inside card -->
+                <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <button onclick="triggerExplosions()" class="hover-target px-8 py-3 bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 hover:brightness-110 rounded-xl font-mono text-xs font-bold tracking-widest uppercase text-white border border-pink-400/20 shadow-lg transition-all duration-300">
+                        TRIGGER COSMIC FIREWORKS 🎇
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer Meta Credits -->
+            <div class="font-mono text-[10px] text-gray-500 uppercase tracking-widest space-y-1 mt-12">
+                <p>Designed and programmed with heavy brotherhood synergy</p>
+                <p>&copy; 2026 - COMPILING ETERNAL FRIENDSHIP MEMORIES</p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- AUDIO & SYNTH ENGINE / WEBSITE CONTROLLER -->
+    <script>
+        // Web Audio Synthesizer Engine (Self-contained nostalgic 80s synth, lasers, explosions, and game sounds)
+        let audioCtx = null;
+        let ambientOsc = null;
+        let ambientOsc2 = null;
+        let filterNode = null;
+        let isAudioPlaying = false;
+
+        function initAudio() {
+            if (audioCtx) return;
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            setupAmbientSynth();
+        }
+
+        function setupAmbientSynth() {
+            // Low cinematic emotional hum / pad
+            ambientOsc = audioCtx.createOscillator();
+            ambientOsc2 = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            filterNode = audioCtx.createBiquadFilter();
+
+            ambientOsc.type = 'triangle';
+            ambientOsc.frequency.setValueAtTime(110, audioCtx.currentTime); // A2 Note (Deep emotional vibe)
+
+            ambientOsc2.type = 'sawtooth';
+            ambientOsc2.frequency.setValueAtTime(165, audioCtx.currentTime); // E3 Note (Beautiful fifth interval)
+
+            filterNode.type = 'lowpass';
+            filterNode.frequency.setValueAtTime(250, audioCtx.currentTime); // Cozy filtered sound
+
+            gainNode.gain.setValueAtTime(0.06, audioCtx.currentTime); // Soft background volume
+
+            // Connect nodes
+            ambientOsc.connect(filterNode);
+            ambientOsc2.connect(filterNode);
+            filterNode.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            ambientOsc.start();
+            ambientOsc2.start();
+
+            // LFO cutoff modulation for nostalgic ambient dynamic movement
+            const lfo = audioCtx.createOscillator();
+            const lfoGain = audioCtx.createGain();
+            lfo.frequency.setValueAtTime(0.15, audioCtx.currentTime); // Extremely slow wave
+            lfoGain.gain.setValueAtTime(120, audioCtx.currentTime); // Range of modulation
+
+            lfo.connect(lfoGain);
+            lfoGain.connect(filterNode.frequency);
+            lfo.start();
+        }
+
+        // Play short retro synthesizer clicks
+        function playSoundClick() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.15);
+
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.16);
+        }
+
+        // Play coin sound when catching otter boi
+        function playSoundCoin() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+            osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08); // E5
+
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.35);
+        }
+
+        // Play alert buzz when teacher attacks hit
+        function playSoundBuzzer() {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(80, audioCtx.currentTime + 0.25);
+
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.28);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        }
+
+        // Play explosion sound for cosmic fireworks
+        function playSoundExplode() {
+            if (!audioCtx) return;
+            const bufferSize = audioCtx.sampleRate * 0.8;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            
+            // Generate simple white noise for explosion
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+
+            const noiseNode = audioCtx.createBufferSource();
+            noiseNode.buffer = buffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(400, audioCtx.currentTime);
+            filter.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.8);
+
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+
+            noiseNode.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            noiseNode.start();
+            noiseNode.stop(audioCtx.currentTime + 0.85);
+        }
+
+        // Toggle Audio controls on interface
+        const soundToggleBtn = document.getElementById('sound-toggle-btn');
+        const audioStatusLabel = document.getElementById('audio-status-label');
+        const musicBars = document.querySelectorAll('.music-bar');
+
+        soundToggleBtn.addEventListener('click', () => {
+            initAudio();
+            if (isAudioPlaying) {
+                audioCtx.suspend();
+                audioStatusLabel.innerText = "SOUND: OFF";
+                musicBars.forEach(b => b.style.height = '15%');
+                isAudioPlaying = false;
+            } else {
+                audioCtx.resume();
+                audioStatusLabel.innerText = "SOUND: ON";
+                // Animate bars roughly to signal active sound state
+                musicBars[0].style.height = '70%';
+                musicBars[1].style.height = '40%';
+                musicBars[2].style.height = '85%';
+                musicBars[3].style.height = '60%';
+                isAudioPlaying = true;
+                playSoundCoin();
+            }
+        });
+
+        // SYSTEM PRELOADER ENGINE
+        window.addEventListener('DOMContentLoaded', () => {
+            const l1 = document.getElementById('loader-line-1');
+            const l2 = document.getElementById('loader-line-2');
+            const l3 = document.getElementById('loader-line-3');
+            const l4 = document.getElementById('loader-line-4');
+            const l5 = document.getElementById('loader-line-5');
+            const progressBar = document.getElementById('loader-progress-bar');
+            const triggerBtn = document.getElementById('loader-trigger-btn');
+
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 8) + 3;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    // Reveal hidden logs sequence
+                    setTimeout(() => { l2.classList.remove('opacity-0'); }, 300);
+                    setTimeout(() => { l3.classList.remove('opacity-0'); }, 700);
+                    setTimeout(() => { l4.classList.remove('opacity-0'); }, 1100);
+                    setTimeout(() => { 
+                        l5.classList.remove('opacity-0');
+                        triggerBtn.removeAttribute('disabled');
+                        triggerBtn.innerText = "ENTER THE LORE";
+                        triggerBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                        triggerBtn.classList.add('cursor-pointer');
+                    }, 1500);
+                }
+                progressBar.style.width = progress + '%';
+            }, 100);
+
+            // Clicking enter lore collapses loader
+            triggerBtn.addEventListener('click', () => {
+                playSoundClick();
+                initAudio();
+                // Play starting audio tone
+                if (audioCtx) {
+                    audioCtx.resume();
+                    audioStatusLabel.innerText = "SOUND: ON";
+                    isAudioPlaying = true;
+                    // Animate music lines
+                    musicBars[0].style.height = '70%';
+                    musicBars[1].style.height = '40%';
+                    musicBars[2].style.height = '85%';
+                    musicBars[3].style.height = '60%';
+                }
+                document.getElementById('preloader').classList.add('hidden');
+                // Spawn introductory floating meme entities
+                spawnInitialMemeEmojis();
+            });
+        });
+
+        // CUSTOM PREMIUM CURSOR CONTROLLER
+        const cursor = document.getElementById('custom-cursor');
+        const cursorDot = document.getElementById('custom-cursor-dot');
+        const hoverTargets = document.querySelectorAll('.hover-target');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+
+        // Scale cursor dynamically on hover of premium interactive zones
+        hoverTargets.forEach(target => {
+            target.addEventListener('mouseenter', () => {
+                cursor.style.width = '55px';
+                cursor.style.height = '55px';
+                cursor.style.backgroundColor = 'rgba(168, 85, 247, 0.2)';
+                cursor.style.borderColor = '#ec4899';
+                cursorDot.style.transform = 'translate(-50%, -50%) scale(2.5)';
+            });
+            target.addEventListener('mouseleave', () => {
+                cursor.style.width = '20px';
+                cursor.style.height = '20px';
+                cursor.style.backgroundColor = 'transparent';
+                cursor.style.borderColor = '#3b82f6';
+                cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
+            });
+        });
+
+        // Keyboard triggers for audio clicking
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'g' || e.key === 'G') {
+                scrollToGame();
+            }
+            if (e.key === 'm' || e.key === 'M') {
+                soundToggleBtn.click();
+            }
+        });
+
+        // BACKGROUND CELESTIAL STARFIELD CANVAS ENGINE
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initStars();
+        }
+
+        function initStars() {
+            stars = [];
+            const count = Math.floor((canvas.width * canvas.height) / 8000);
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    speedX: (Math.random() - 0.5) * 0.15,
+                    speedY: (Math.random() - 0.5) * 0.15,
+                    color: Math.random() > 0.5 ? 'rgba(168, 85, 247, 0.4)' : 'rgba(59, 130, 246, 0.4)'
+                });
+            }
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fillStyle = star.color;
+                ctx.fill();
+
+                star.x += star.speedX;
+                star.y += star.speedY;
+
+                // Loop borders seamlessly
+                if (star.x < 0) star.x = canvas.width;
+                if (star.x > canvas.width) star.x = 0;
+                if (star.y < 0) star.y = canvas.height;
+                if (star.y > canvas.height) star.y = 0;
+            });
+            requestAnimationFrame(animateStars);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        animateStars();
+
+        // CLASSROOM SIMULATION LOGIC (SECTION 1)
+        function triggerClassroomSim() {
+            playSoundClick();
+            const bubble1 = document.getElementById('baith-jau-bubble');
+            const bubble2 = document.getElementById('baith-jao-bubble');
+            const seat = document.getElementById('ankur-seat');
+            const emoji = document.getElementById('ankur-emoji');
+
+            // Reset states
+            bubble1.classList.add('scale-0');
+            bubble2.classList.add('scale-0');
+            emoji.style.transform = 'translateY(-100px)';
+            emoji.style.opacity = '0';
+
+            // Phase 1: Ankur walks down to desk
+            setTimeout(() => {
+                emoji.style.transform = 'translateY(0px)';
+                emoji.style.opacity = '1';
+                if (audioCtx) playSoundClick();
+            }, 300);
+
+            // Phase 2: He asks 'baith jau'
+            setTimeout(() => {
+                bubble1.classList.remove('scale-0');
+                if (audioCtx) playSoundClick();
+            }, 1200);
+
+            // Phase 3: Response 'baith jao'
+            setTimeout(() => {
+                bubble2.classList.remove('scale-0');
+                if (audioCtx) playSoundCoin();
+            }, 2200);
+        }
+
+        // 3DPerspective Card Tilting Logic
+        function handleTilt(e, card) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left; // x position inside element
+            const y = e.clientY - rect.top;  // y position inside element
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            // Calculate tilt angle ratio
+            const rotateY = ((x - centerX) / centerX) * 10; // Max 10 degrees tilt
+            const rotateX = -((y - centerY) / centerY) * 10;
+            
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        }
+
+        function resetTilt(card) {
+            card.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+        }
+
+        // DIAGNOSTICS SCANNER LOGIC (SECTION 2)
+        function runFriendshipDiagnostic() {
+            playSoundClick();
+            const logLine = document.getElementById('scan-terminal-line');
+            const resultLine = document.getElementById('scan-result-line');
+            const btn = document.getElementById('scan-btn');
+
+            btn.disabled = true;
+            btn.innerText = "SCANNING DATABASE...";
+            logLine.innerText = "> Initializing diagnostics sequence: [Ankur Roy] <-> [You]";
+            
+            setTimeout(() => {
+                logLine.innerText = "> Running neural match filters... 32% calculated";
+                if (audioCtx) playSoundClick();
+            }, 800);
+
+            setTimeout(() => {
+                logLine.innerText = "> Decompressing 720p memes database... 78% calculated";
+                if (audioCtx) playSoundClick();
+            }, 1500);
+
+            setTimeout(() => {
+                logLine.innerText = "> Scanning finished successfully.";
+                resultLine.classList.remove('hidden');
+                btn.disabled = false;
+                btn.innerText = "SCAN COMPLETED 🗿";
+                if (audioCtx) playSoundBuzzer();
+            }, 2300);
+        }
+
+        // COYOTE / SPY DOG SYSTEM (SECTION 4)
+        function scareSpyDog() {
+            playSoundClick();
+            const dog = document.getElementById('spy-dog-element');
+            
+            // Trigger quick run sequence
+            dog.style.transform = 'translateX(60px)';
+            dog.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                dog.style.transform = 'translateX(0px)';
+                dog.style.opacity = '1';
+                if (audioCtx) playSoundBuzzer();
+            }, 1000);
+        }
+
+        // THE ARCADE RETRO CHALLENGE CANVAS GAME ENGINE (SECTION 5)
+        const gameCanvas = document.getElementById('game-canvas');
+        const gameCtx = gameCanvas.getContext('2d');
+        const scoreLabel = document.getElementById('arcade-score-label');
+        const gameIntro = document.getElementById('game-intro-overlay');
+        const gameWin = document.getElementById('game-win-overlay');
+
+        let score = 0;
+        let gameActive = false;
+        let playerX = 0;
+        const playerWidth = 80;
+        const playerHeight = 40;
+        let gameItems = [];
+        let itemSpeed = 3.5;
+        let gameLoopId = null;
+
+        // Ensure canvas aligns perfectly inside parents bounds
+        function adjustGameCanvasSize() {
+            const container = gameCanvas.parentElement;
+            gameCanvas.width = container.clientWidth;
+            gameCanvas.height = 350;
+            playerX = gameCanvas.width / 2 - playerWidth / 2;
+        }
+
+        window.addEventListener('resize', () => {
+            if (gameActive) adjustGameCanvasSize();
+        });
+
+        // Track mouse/touch controller motions
+        gameCanvas.addEventListener('mousemove', (e) => {
+            if (!gameActive) return;
+            const rect = gameCanvas.getBoundingClientRect();
+            const root = document.documentElement;
+            const mouseX = e.clientX - rect.left - root.scrollLeft;
+            playerX = mouseX - playerWidth / 2;
+            
+            // Boundary limitations
+            if (playerX < 0) playerX = 0;
+            if (playerX > gameCanvas.width - playerWidth) playerX = gameCanvas.width - playerWidth;
+        });
+
+        // Touch control buttons logic
+        document.getElementById('touch-left-btn').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!gameActive) return;
+            playerX -= 30;
+            if (playerX < 0) playerX = 0;
+        });
+        document.getElementById('touch-right-btn').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!gameActive) return;
+            playerX += 30;
+            if (playerX > gameCanvas.width - playerWidth) playerX = gameCanvas.width - playerWidth;
+        });
+
+        // Keyboard navigation fallback
+        document.addEventListener('keydown', (e) => {
+            if (!gameActive) return;
+            if (e.key === 'ArrowLeft') {
+                playerX -= 25;
+                if (playerX < 0) playerX = 0;
+            }
+            if (e.key === 'ArrowRight') {
+                playerX += 25;
+                if (playerX > gameCanvas.width - playerWidth) playerX = gameCanvas.width - playerWidth;
+            }
+        });
+
+        function startGame() {
+            adjustGameCanvasSize();
+            gameIntro.classList.add('hidden');
+            gameWin.classList.add('hidden');
+            score = 0;
+            scoreLabel.innerText = "SCORE: 00 / 10";
+            gameItems = [];
+            gameActive = true;
+            itemSpeed = 3.5;
+            spawnGameItem();
+            gameLoop();
+            playSoundClick();
+        }
+
+        function resetGame() {
+            gameActive = false;
+            cancelAnimationFrame(gameLoopId);
+            gameIntro.classList.remove('hidden');
+            gameWin.classList.add('hidden');
+            score = 0;
+            scoreLabel.innerText = "SCORE: 00 / 10";
+        }
+
+        function spawnGameItem() {
+            if (!gameActive) return;
+            // Emojis: 🦦 (Otter - Good), 💿 (720p Energy - Bad), 👨‍🏫 (Teacher - Bad)
+            const rand = Math.random();
+            let type = 'otter';
+            let emojiStr = '🦦';
+            if (rand > 0.6) {
+                type = 'pirate';
+                emojiStr = '💿';
+            } else if (rand > 0.8) {
+                type = 'teacher';
+                emojiStr = '👨‍🏫';
+            }
+
+            gameItems.push({
+                x: Math.random() * (gameCanvas.width - 30) + 10,
+                y: -30,
+                type: type,
+                emoji: emojiStr,
+                size: 26
             });
 
-            if (ic === 0) instantBox.innerHTML = '<div class="text-slate-400 text-xs italic py-2">No active instant guides left.</div>';
-            if (lt === 0) longTermBox.innerHTML = '<div class="text-slate-400 text-xs italic py-2">Long-term alignment optimized.</div>';
-            document.getElementById('active-targets-count').innerText = `${ic + lt} Directives Active`;
+            // Adjust difficulty dynamically or spawn more
+            const spawnRate = score >= 5 ? 1200 : 1800;
+            setTimeout(spawnGameItem, spawnRate);
         }
 
-        function populateDashboard(data) {
-            const v = parseFloat(data.metrics?.live_growth_velocity || data.metrics?.live_growth_velocity === 0 ? data.metrics.live_growth_velocity : 50);
-            const o = parseFloat(data.metrics?.live_opportunity_probability || data.metrics?.live_opportunity_probability === 0 ? data.metrics.live_opportunity_probability : 50);
-            const s = parseFloat(data.metrics?.live_stress_level || 4);
+        function gameLoop() {
+            if (!gameActive) return;
+            gameCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-            document.getElementById('metric-consistency').innerText = v.toFixed(1) + '%';
-            document.getElementById('metric-consistency-bar').style.width = `${v}%`;
-            document.getElementById('metric-mindset').innerText = o.toFixed(1) + '%';
-            document.getElementById('metric-mindset-bar').style.width = `${o}%`;
-
-            document.getElementById('metric-stress').innerText = s.toFixed(1);
-            document.getElementById('stress-ring').style.strokeDashoffset = 251.2 - (s / 10) * 251.2;
+            // Draw Basket (YOUR DESK 💻)
+            gameCtx.fillStyle = '#a855f7';
+            gameCtx.beginPath();
+            gameCtx.roundRect(playerX, gameCanvas.height - playerHeight - 10, playerWidth, playerHeight, [8, 8, 0, 0]);
+            gameCtx.fill();
+            gameCtx.lineWidth = 2;
+            gameCtx.strokeStyle = '#ec4899';
+            gameCtx.stroke();
             
-            const desc = document.getElementById('stress-descriptor');
-            if (s <= 3.5) { desc.innerText = 'Optimal Flow Balance'; desc.className = 'text-xs font-semibold text-emerald-600'; }
-            else if (s <= 6.5) { desc.innerText = 'Moderate Mental Load'; desc.className = 'text-xs font-semibold text-blue-600'; }
-            else { desc.innerText = 'High Strain Warning'; desc.className = 'text-xs font-semibold text-rose-600'; }
+            // Draw basket title inside
+            gameCtx.fillStyle = '#ffffff';
+            gameCtx.font = 'bold 9px Share Tech Mono';
+            gameCtx.fillText("YOUR DESK", playerX + 14, gameCanvas.height - 25);
 
-            renderChecklist(data.targets || []);
+            // Update & Render Game items
+            for (let i = gameItems.length - 1; i >= 0; i--) {
+                const item = gameItems[i];
+                item.y += itemSpeed;
+
+                // Draw emoji
+                gameCtx.font = `${item.size}px Arial`;
+                gameCtx.fillText(item.emoji, item.x, item.y);
+
+                // Collision Detection boundary
+                const basketY = gameCanvas.height - playerHeight - 10;
+                if (item.y + item.size >= basketY && item.y <= basketY + playerHeight) {
+                    if (item.x + item.size >= playerX && item.x <= playerX + playerWidth) {
+                        // Collided with desk!
+                        if (item.type === 'otter') {
+                            score += 1;
+                            scoreLabel.innerText = `SCORE: ${score.toString().padStart(2, '0')} / 10`;
+                            playSoundCoin();
+                            
+                            // Check if score threshold met
+                            if (score >= 10) {
+                                winGame();
+                            }
+                        } else {
+                            // Hit by bad teacher / bad disc
+                            score = Math.max(0, score - 2);
+                            scoreLabel.innerText = `SCORE: ${score.toString().padStart(2, '0')} / 10`;
+                            playSoundBuzzer();
+                        }
+                        gameItems.splice(i, 1);
+                        continue;
+                    }
+                }
+
+                // Delete items falling off screen limits
+                if (item.y > gameCanvas.height) {
+                    gameItems.splice(i, 1);
+                }
+            }
+
+            gameLoopId = requestAnimationFrame(gameLoop);
         }
 
-        async function fetchDashboardState() {
-            try {
-                const r = await fetch(`${API_BASE_URL}/dashboard`);
-                if (r.status === 200) {
-                    const d = await r.json();
-                    isDemoMode = false;
-                    updateConnectionBadge(true);
-                    populateDashboard(d);
-                    switchView('dashboard');
-                } else {
-                    isDemoMode = false;
-                    updateConnectionBadge(true);
-                    switchView('setup');
-                }
-            } catch (e) {
-                isDemoMode = true;
-                updateConnectionBadge(false);
-                switchView(mockDatabase.profile ? 'dashboard' : 'setup');
-                if (mockDatabase.profile) populateDashboard(mockDatabase);
+        function winGame() {
+            gameActive = false;
+            cancelAnimationFrame(gameLoopId);
+            gameWin.classList.remove('hidden');
+            if (audioCtx) playSoundCoin();
+            triggerExplosions();
+        }
+
+        function scrollToGame() {
+            document.getElementById('section-game').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                startGame();
+            }, 800);
+        }
+
+        // SECTION 6 FIREWORKS / CELEBRATION CHANNELS ENGINE
+        const fwCanvas = document.getElementById('fireworks-canvas');
+        const fwCtx = fwCanvas.getContext('2d');
+        let fwParticles = [];
+
+        function resizeFwCanvas() {
+            fwCanvas.width = fwCanvas.parentElement.clientWidth;
+            fwCanvas.height = fwCanvas.parentElement.clientHeight;
+        }
+
+        function addFirework(x, y) {
+            const colors = ['#a855f7', '#3b82f6', '#ec4899', '#22c55e', '#ef4444', '#eab308'];
+            const explosionColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            for (let i = 0; i < 45; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 2;
+                fwParticles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    alpha: 1,
+                    decay: Math.random() * 0.02 + 0.015,
+                    color: explosionColor,
+                    size: Math.random() * 3.5 + 1.5
+                });
+            }
+            playSoundExplode();
+        }
+
+        function triggerExplosions() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * fwCanvas.width;
+                    const y = Math.random() * (fwCanvas.height * 0.6) + 100;
+                    addFirework(x, y);
+                }, i * 400);
             }
         }
 
-        async function toggleTarget(id, checked) {
-            try {
-                if (isDemoMode) {
-                    const t = mockDatabase.targets.find(item => item.id === id);
-                    if (t) t.is_completed = checked ? 1 : 0;
-                    populateDashboard(mockDatabase);
-                    showNotification("State Changed", "Ecosystem metrics dynamically computed inside demo layer.", "success");
-                } else {
-                    const r = await fetch(`${API_BASE_URL}/targets/${id}/toggle`, {
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ is_completed: checked })
-                    });
-                    if (!r.ok) throw new Error();
-                    showNotification("Sync Successful", "Ecosystem checklist and metrics aligned dynamically.", "success");
-                    await fetchDashboardState();
+        function animateFireworks() {
+            fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+            
+            for (let i = fwParticles.length - 1; i >= 0; i--) {
+                const p = fwParticles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.08; // Small gravity factor
+                p.alpha -= p.decay;
+
+                if (p.alpha <= 0) {
+                    fwParticles.splice(i, 1);
+                    continue;
                 }
-            } catch (err) {
-                showNotification("Sync Failed", "Error linking target execution coordinates.", "error");
-                await fetchDashboardState();
+
+                fwCtx.beginPath();
+                fwCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                fwCtx.fillStyle = p.color;
+                fwCtx.globalAlpha = p.alpha;
+                fwCtx.fill();
+            }
+            fwCtx.globalAlpha = 1.0;
+            requestAnimationFrame(animateFireworks);
+        }
+
+        window.addEventListener('resize', resizeFwCanvas);
+        resizeFwCanvas();
+        animateFireworks();
+
+        // CHAOTIC FLOATING MEME EMOJI SPAWNER (Awwwards Vibe)
+        const emojiContainer = document.getElementById('floating-emoji-container');
+        const memeEmojis = ['🦦', '💻', '📀', '🗿', '🔥', '📚', '🐕', '🎯'];
+
+        function spawnInitialMemeEmojis() {
+            for (let i = 0; i < 15; i++) {
+                createFloatingMemeElement();
             }
         }
 
-        document.getElementById('setup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const payload = {
-                daily_routines: document.getElementById('daily_routines').value,
-                goals_and_ambitions: document.getElementById('goals_and_ambitions').value,
-                distractions_and_leaks: document.getElementById('distractions_and_leaks').value,
-                initial_consistency: parseInt(document.getElementById('consistency_level').value),
-                initial_resilience: parseInt(document.getElementById('resilience_level').value)
-            };
+        function createFloatingMemeElement() {
+            const el = document.createElement('div');
+            el.innerText = memeEmojis[Math.floor(Math.random() * memeEmojis.length)];
+            el.className = 'absolute text-xl md:text-3xl transition-all duration-[6000ms] pointer-events-none opacity-40 select-none';
+            
+            // Random styling layouts
+            const left = Math.random() * 100;
+            const top = Math.random() * 100;
+            el.style.left = left + '%';
+            el.style.top = top + '%';
+            
+            emojiContainer.appendChild(el);
 
-            const btn = document.getElementById('btn-submit-setup');
-            const orig = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = 'Locking Coordinates...';
+            // Animate floats around container smoothly
+            setInterval(() => {
+                const moveX = (Math.random() - 0.5) * 40;
+                const moveY = (Math.random() - 0.5) * 40;
+                el.style.transform = `translate(${moveX}px, ${moveY}px) rotate(${Math.random() * 360}deg)`;
+            }, 3000);
+        }
 
-            try {
-                if (isDemoMode) {
-                    await new Promise(res => setTimeout(res, 800));
-                    mockDatabase.profile = payload;
-                    populateDashboard(mockDatabase);
-                    switchView('dashboard');
-                } else {
-                    const r = await fetch(`${API_BASE_URL}/profile/setup`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (!r.ok) throw new Error();
-                    await fetchDashboardState();
+        // INTERSECTION OBSERVER FOR CINEMATIC STORY ELEMENTS
+        const storyElements = document.querySelectorAll('.story-fade-in');
+        const observerOptions = {
+            threshold: 0.35
+        };
+
+        const storyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('opacity-30');
+                    entry.target.classList.add('opacity-100', 'translate-x-0');
+                    // Add subtle click trigger audio as user scrolls story blocks
+                    if (audioCtx && isAudioPlaying) playSoundClick();
                 }
-                showNotification("Profile Configured", "Your parameters are verified and locked.", "success");
-            } catch (err) {
-                showNotification("Error", "Registration payload rejected. Check backend terminal.", "error");
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = orig;
-            }
+            });
+        }, observerOptions);
+
+        storyElements.forEach(el => {
+            storyObserver.observe(el);
         });
 
-        document.getElementById('recalibrate-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const text = document.getElementById('recalibrate_input').value;
-            const btn = document.getElementById('btn-recalibrate');
-            const orig = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = 'Recalibrating Tracks...';
-
-            try {
-                if (isDemoMode) {
-                    await new Promise(res => setTimeout(res, 1000));
-                    mockDatabase.targets.push({
-                        id: Date.now(),
-                        target_type: "instant",
-                        description: `Calibrated micro-task: Focus processing loop adjustment for prompt`,
-                        is_completed: 0
-                    });
-                    populateDashboard(mockDatabase);
-                } else {
-                    const r = await fetch(`${API_BASE_URL}/profile/recalibrate`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ input: text })
-                    });
-                    if (!r.ok) throw new Error();
-                    await fetchDashboardState();
-                }
-                document.getElementById('recalibrate_input').value = '';
-                showNotification("Ecosystem Adjusted", "AI engine re-allocated micro-steps efficiently.", "success");
-            } catch (err) {
-                showNotification("Error", "Recalibration routine pipeline rejected.", "error");
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = orig;
-            }
-        });
-
-        document.getElementById('btn-manual-sync').addEventListener('click', () => {
-            showNotification("Querying Engine", "Verifying active state rows...", "info");
-            fetchDashboardState();
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            fetchDashboardState();
-        });
     </script>
 </body>
 </html>
