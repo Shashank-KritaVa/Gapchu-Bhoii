@@ -57,11 +57,10 @@
             overflow-x: hidden;
         }
         
-        /* Apply strict hidden cursor layout rules for dual mouse-touch screens */
-        @media (hover: hover) and (pointer: fine) {
-            body, body * {
-                cursor: none !important;
-            }
+        /* Only hide native cursor when custom cursor class is active on body */
+        body.custom-cursor-active,
+        body.custom-cursor-active * {
+            cursor: none !important;
         }
 
         .custom-cursor {
@@ -72,9 +71,9 @@
             position: fixed;
             transform: translate(-50%, -50%);
             pointer-events: none;
-            z-index: 9999;
+            z-index: 99999;
             transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
-            opacity: 0;
+            display: none; /* Managed by JS */
         }
 
         .custom-cursor-dot {
@@ -85,8 +84,8 @@
             position: fixed;
             transform: translate(-50%, -50%);
             pointer-events: none;
-            z-index: 9999;
-            opacity: 0;
+            z-index: 99999;
+            display: none; /* Managed by JS */
         }
 
         .cursor-hover {
@@ -679,7 +678,7 @@
                         </button>
                     </div>
 
-                    <!-- Overlay screen: LEVEL WIN / DECRYPTED MSG (Responsive/No extra quotes) -->
+                    <!-- Overlay screen: LEVEL WIN / DECRYPTED MSG -->
                     <div id="game-win-overlay" class="absolute inset-0 bg-black/95 flex flex-col justify-center items-center p-4 md:p-8 space-y-4 hidden overflow-y-auto max-h-full">
                         <span class="text-3xl animate-bounce">🏆</span>
                         <h4 class="font-retro text-[11px] text-green-400 uppercase tracking-widest text-center">SYSTEM DECRYPTED SUCCESSFULLY</h4>
@@ -1131,17 +1130,19 @@
             });
         });
 
-        // CUSTOM PREMIUM CURSOR CONTROLLER
+        // NEW FAIL-SAFE CURSOR SYSTEM
         const cursor = document.getElementById('custom-cursor');
         const cursorDot = document.getElementById('custom-cursor-dot');
+        let hasActiveMouse = false;
 
-        // Track mouse movements to only show custom elements when fine cursor is active
+        // Track mouse movements to only show custom elements when trackpad/mouse is actively sliding
         document.addEventListener('mousemove', (e) => {
-            if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-                document.body.classList.add('custom-cursor-enabled');
-                cursor.style.opacity = '1';
-                cursorDot.style.opacity = '1';
-            }
+            hasActiveMouse = true;
+            document.body.classList.add('custom-cursor-active');
+            
+            cursor.style.display = 'block';
+            cursorDot.style.display = 'block';
+            
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
             cursorDot.style.left = e.clientX + 'px';
@@ -1150,13 +1151,14 @@
 
         // Toggle state opacity on pointer leave/enter frame
         document.addEventListener('mouseleave', () => {
-            cursor.style.opacity = '0';
-            cursorDot.style.opacity = '0';
+            cursor.style.display = 'none';
+            cursorDot.style.display = 'none';
         });
+        
         document.addEventListener('mouseenter', () => {
-            if (document.body.classList.contains('custom-cursor-enabled')) {
-                cursor.style.opacity = '1';
-                cursorDot.style.opacity = '1';
+            if (hasActiveMouse) {
+                cursor.style.display = 'block';
+                cursorDot.style.display = 'block';
             }
         });
 
@@ -1188,12 +1190,12 @@
             }
         });
 
-        // Hybrid / Touchscreen laptop safety: fall back to normal cursor on screen taps
+        // Hybrid / Touchscreen laptop safety: INSTANT restoration of normal cursor on touch/tap
         window.addEventListener('touchstart', function handleTouch() {
-            document.body.classList.remove('custom-cursor-enabled');
+            hasActiveMouse = false;
+            document.body.classList.remove('custom-cursor-active');
             cursor.style.display = 'none';
             cursorDot.style.display = 'none';
-            window.removeEventListener('touchstart', handleTouch);
         });
 
         // Keyboard triggers for audio clicking
@@ -1678,3 +1680,8 @@
     </script>
 </body>
 </html>
+```
+eof
+
+### Done!
+I have thoroughly fixed the vanishing cursor issue on hybrid devices. You are ready to open the preview and enjoy the experience. Happy birthday to **Ankur Roy**! 🎂🦦
